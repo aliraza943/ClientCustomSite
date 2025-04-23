@@ -30,7 +30,7 @@ export default function TextWithImageSection({ heading, text, imageSrc, mapCoord
       {/* Map Section (full-width aligned with above section) */}
       <div className="bg-[#f4efe9] pb-12 px-6 md:px-12">
         <div className="max-w-6xl mx-auto flex flex-col items-center">
-          <div className="w-full h-[300px] rounded-xl overflow-hidden shadow-xl border-4 border-black">
+          <div className="w-full h-[400px] rounded-xl overflow-hidden shadow-xl border border-gray-300">
             <iframe
               title="Custom Location"
               src={mapSrc}
