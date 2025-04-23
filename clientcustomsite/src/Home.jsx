@@ -5,7 +5,7 @@ import Footer from './Footer';
 import Header from './Header';
 import HeroImage from './HeroImage';
 import TextWithImageSection from './TextWithImageSecttion';
-
+import { Link } from 'react-router-dom';
 export default function Home() {
   const { siteUrl } = useParams();
   const [websiteData, setWebsiteData] = useState(null);
@@ -18,6 +18,7 @@ export default function Home() {
         const payload = await res.json();
         if (res.ok && payload.website) {
           setWebsiteData(payload.website);
+          console.log(payload)
         } else {
           console.warn(payload.message || 'Website not found');
         }
@@ -45,19 +46,20 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
       <Header
-        logoSrc={logoUrl}
-        logoAlt={websiteData.siteName || 'Logo'}
-        navLinks={[
-          { href: '/', text: 'Home' },
-          { href: '/services', text: 'Services' },
-          { href: '/blog', text: 'Meet Our Team' },
-          { href: '/contact', text: 'Bookings' },
-        ]}
-        socialLinks={websiteData.socialLinks || {}}
-        fontClass={websiteData.headerSettings?.fontClass || ''}
-        customBgColor={websiteData.headerSettings?.headerBgColor || '#ffffff'}
-        customTextColor={websiteData.headerSettings?.headerTextColor || '#000000'}
-      />
+  logoSrc={logoUrl}
+  logoAlt={websiteData.siteName || 'Logo'}
+  navLinks={[
+    { href: `/${siteUrl}`, text: 'Home' },
+    { href: `/${siteUrl}/services`, text: 'Services' },
+    { href: `/${siteUrl}/meetourteam`, text: 'Meet Our Team' },
+    { href: `/${siteUrl}/contact`, text: 'Bookings' },
+  ]}
+  socialLinks={websiteData.socialLinks || {}}
+  fontClass={websiteData.headerSettings?.fontClass || ''}
+  customBgColor={websiteData.headerSettings?.headerBgColor || '#ffffff'}
+  customTextColor={websiteData.headerSettings?.headerTextColor || '#000000'}
+/>
+
 
       {/* Hero Image Gallery */}
       <HeroImage
