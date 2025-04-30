@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import Header from './Header';
 import Footer from './Footer';
+import ServicesList from './ServicesList';
 
 export default function Services() {
   const { siteUrl } = useParams();
@@ -15,15 +16,15 @@ export default function Services() {
   const [websiteData, setWebsiteData] = useState(null);
   const [siteLoading, setSiteLoading] = useState(true);
 
-  // Fetch services
+  // Fetch services by siteUrl
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:8080/api/website/get-meetourTeam/${siteUrl}`
+          `http://localhost:8080/api/website/get-services/${siteUrl}`
         );
         if (data.success) {
-          setServices(data.cards);
+          setServices(data.services);
         } else {
           setServicesError('No services returned from server.');
         }
@@ -37,11 +38,13 @@ export default function Services() {
     if (siteUrl) fetchServices();
   }, [siteUrl]);
 
-  // Fetch website data (logo, site name, header/footer settings)
+  // Fetch website data (logo, siteName, header/footer settings)
   useEffect(() => {
     const fetchWebsiteData = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/website/get-website/${siteUrl}`);
+        const res = await fetch(
+          `http://localhost:8080/api/website/get-website/${siteUrl}`
+        );
         const payload = await res.json();
         if (res.ok && payload.website) {
           setWebsiteData(payload.website);
@@ -82,37 +85,15 @@ export default function Services() {
 
       {/* Main Content */}
       <main className="p-8 flex-grow">
-        
         <p className="text-lg mb-4">
-        Meet Our Team of Professionals<span className="font-semibold"></span>
+          Our Services
         </p>
 
-        {servicesLoading ? (
-          <p>Loading services...</p>
-        ) : servicesError ? (
-          <p className="text-red-500">{servicesError}</p>
-        ) : services.length === 0 ? (
-          <p>No services found.</p>
-        ) : (
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service) => (
-            <li key={service._id} className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 p-5">
-              <div className="mb-4">
-                <img
-                  src={`http://localhost:8080${service.image}`}
-                  alt={service.description}
-                  className="rounded-lg w-full h-48 object-cover"
-                />
-              </div>
-              <h2 className="text-xl font-bold text-gray-800 mb-2">
-                {service.staffId?.name || 'Unnamed Staff'}
-              </h2>
-              <p className="text-gray-600">{service.description}</p>
-            </li>
-          ))}
-        </ul>
-        
-        )}
+        <ServicesList
+          services={services}
+          servicesLoading={servicesLoading}
+          servicesError={servicesError}
+        />
       </main>
 
       {/* Footer */}
