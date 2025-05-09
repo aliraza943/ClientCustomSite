@@ -3,9 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ServicesList from './ServiceComponet';
 import BookingCart from './BookingComponent';
-import ProfessionalComponent from './ProfessionalComponent'; // Updated name to match import
-import BookingConfirmation from './BookingComponent'; // Import your BookingConfirmation component
-import Step3Component from './Step3Component'; // Import the new Step 3 component
+import ProfessionalComponent from './ProfessionalComponent';
+import ConfirmationComponent from './Step3Component';
 
 const BookingPage = () => {
   const { siteUrl } = useParams();
@@ -14,7 +13,7 @@ const BookingPage = () => {
   const [servicesLoading, setServicesLoading] = useState(true);
   const [servicesError, setServicesError] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
-  const [professionalData, setProfessionalData] = useState(null); // Store professional data
+  const [selection, setSelection] = useState(null); // only selection part
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -47,9 +46,15 @@ const BookingPage = () => {
     setBookings(bookings.filter((b) => b._id !== id));
   };
 
-  const handleContinue = (professionalSelection) => {
-    setProfessionalData(professionalSelection); // Store the professional selection data
-    setCurrentStep(3); // Move to step 3
+  const handleContinue = (data) => {
+ 
+    if (currentStep === 2) {
+      setSelection(data.selection); 
+      console.log('Selection:', data.selection);
+      setCurrentStep(3);
+    } else if (bookings.length > 0) {
+      setCurrentStep(2);
+    }
   };
 
   const renderStepContent = () => {
@@ -66,7 +71,7 @@ const BookingPage = () => {
             <BookingCart
               bookings={bookings}
               removeBooking={removeBooking}
-              onContinue={handleContinue} // Pass the handleContinue function to BookingConfirmation
+              onContinue={handleContinue}
             />
           </>
         );
@@ -74,11 +79,16 @@ const BookingPage = () => {
         return (
           <ProfessionalComponent
             bookings={bookings}
-            professionalData={professionalData} // Pass professionalData to ProfessionalComponent
+            onContinue={handleContinue}
           />
         );
       case 3:
-        return <Step3Component professionalData={professionalData} />; // Display data in Step 3
+        return (
+          <ConfirmationComponent
+            bookings={bookings}
+            selection={selection} // pass only selection
+          />
+        );
       default:
         return null;
     }
@@ -119,19 +129,17 @@ const BookingPage = () => {
               ? 'bg-blue-600 text-white border-blue-600'
               : 'bg-white text-gray-600 border-gray-300'
           }`}
-          onClick={() => {
-            if (professionalData) {
-              setCurrentStep(3); // Move to Step 3
-            }
-          }}
-          disabled={!professionalData}
+          onClick={() => setCurrentStep(3)}
+          disabled={bookings.length === 0 || currentStep < 3}
         >
-          3. Review & Confirm
+          3. Confirm Booking
         </button>
       </div>
 
       {/* Step content */}
-      <div className="flex flex-col lg:flex-row gap-10">{renderStepContent()}</div>
+      <div className="flex flex-col lg:flex-row gap-10">
+        {renderStepContent()}
+      </div>
     </div>
   );
 };

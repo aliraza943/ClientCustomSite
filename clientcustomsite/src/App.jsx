@@ -6,6 +6,8 @@ import Services from './Services';
 import NotFound from './NotFound';
 import './App.css';
 import ServiceDetails from './serviceDetails';
+import Bookings from './Bookings';
+  
 
 export default function App() {
   return (
@@ -16,7 +18,10 @@ export default function App() {
          
         />  <Route path="Services" element={<ServiceDetails />}
          
-        />{/* Matches /:siteUrl/services */}
+        />
+        <Route path="Bookings" element={<Bookings />}
+         
+         />{/* Matches /:siteUrl/services */}
       </Route>
       <Route path="/about" element={<About />} />
       <Route path="*" element={<NotFound />} />

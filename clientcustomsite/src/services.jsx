@@ -76,7 +76,7 @@ export default function Services() {
           { href: `/${siteUrl}`, text: 'Home' },
           { href: `/${siteUrl}/services`, text: 'Services' },
           { href: `/${siteUrl}/meetourteam`, text: 'Meet Our Team' },
-          { href: `/${siteUrl}/contact`, text: 'Bookings' },
+          { href: `/${siteUrl}/bookings`, text: 'Bookings' },
         ]}
       />
 
