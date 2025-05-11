@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BookingCart = ({ bookings, removeBooking,onContinue }) => {
+const BookingCart = ({ bookings, removeBooking, onContinue }) => {
   const totalPrice = bookings.reduce((sum, item) => sum + (item.price || 0), 0);
 
   const formatCAD = (amount) =>
@@ -30,24 +30,25 @@ const BookingCart = ({ bookings, removeBooking,onContinue }) => {
                 </div>
                 <button
                   onClick={() => removeBooking(booking._id)}
-                  className="text-red-500 hover:text-red-700 text-lg font-bold p-2 rounded-full bg-white shadow"
+                  className="w-10 h-10 text-red-500 hover:text-red-700 text-lg font-bold rounded-full bg-white shadow flex items-center justify-center"
                   title="Remove service"
                 >
                   &minus;
                 </button>
+
               </li>
             ))}
           </ul>
           <div className="mt-6 text-right text-xl font-semibold">
             Total: <span className="text-green-700">{formatCAD(totalPrice)}</span>
           </div>
-        
-<button
-  onClick={onContinue}
-  className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded"
->
-  Continue
-</button>
+
+          <button
+            onClick={onContinue}
+            className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded"
+          >
+            Continue
+          </button>
 
         </>
       )}
