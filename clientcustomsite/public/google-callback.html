@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Sign-In Callback</title>
+</head>
+<body>
+  <script>
+    (function () {
+      const hash = new URLSearchParams(window.location.hash.slice(1));
+      const idToken = hash.get("id_token");
+
+      if (idToken) {
+        try {
+          // Decode JWT payload
+          const payload = JSON.parse(atob(idToken.split('.')[1]));
+          const email = payload.email;
+
+          // Send email back to opener
+          if (window.opener) {
+            window.opener.postMessage({ email }, window.location.origin);
+          }
+        } catch (err) {
+          console.error("Error decoding ID token:", err);
+        }
+      } else {
+        console.warn("No ID token found.");
+      }
+
+      // Always close the window after a short delay
+      setTimeout(() => window.close(), 500);
+    })();
+  </script>
+</body>
+</html>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom'; // ← Add this
 
 const AppointmentModal = ({ open, onClose, slot, appointments }) => {
+  const navigate = useNavigate(); // ← Add this
   const [enriched, setEnriched] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     if (!open) return;
 
@@ -35,8 +36,17 @@ const AppointmentModal = ({ open, onClose, slot, appointments }) => {
 
     fetchDetails();
   }, [open, appointments]);
+  
 
   if (!open) return null;
+
+const handleContinue = () => {
+  // Save to localStorage
+  localStorage.setItem('appointments', JSON.stringify(enriched));
+
+  // Navigate to /login
+  navigate('/login');
+};
 
   return (
     <>
@@ -99,12 +109,15 @@ const AppointmentModal = ({ open, onClose, slot, appointments }) => {
           {/* Confirm Button */}
           {!loading && !error && (
             <div className="mt-6 text-center">
-              <button
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition"
-                onClick={() => alert('Confirmed (just for show)')}
-              >
-                Confirm
-              </button>
+            <div className="mt-6 text-center">
+  <button
+    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition"
+    onClick={handleContinue}
+  >
+    Continue
+  </button>
+</div>
+
             </div>
           )}
         </div>

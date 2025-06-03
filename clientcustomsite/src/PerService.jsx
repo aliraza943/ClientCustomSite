@@ -30,7 +30,7 @@ const PerServiceComponent = ({ bookings, professionals, onSubmit }) => {
 
     return [
       {
-        value: 'max-available',
+        value: 'max_availability',
         label: 'Any professional with maximum availability',
         icon: <FaUsers className="text-blue-600 w-6 h-6" />,
       },
